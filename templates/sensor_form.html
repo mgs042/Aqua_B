@@ -1,0 +1,32 @@
+<!-- sensor_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Sensor Data</title>
+</head>
+<body>
+    <h1>Enter Sensor Data</h1>
+    <form id="sensorForm" action="/write" method="post">
+        <label for="pH">pH:</label><br>
+        <input type="number" id="pH" name="pH" step="0.01" required><br>
+        <label for="temperature">Temperature (°C):</label><br>
+        <input type="number" id="temperature" name="temperature" step="0.01" required><br>
+        <label for="dissolved_oxygen">Dissolved Oxygen (mg/L):</label><br>
+        <input type="number" id="dissolved_oxygen" name="dissolved_oxygen" step="0.01" required><br>
+        <label for="turbidity">Turbidity (NTU):</label><br>
+        <input type="number" id="turbidity" name="turbidity" step="0.01" required><br>
+        <label for="TDS">Total Dissolved Solids (TDS) (mg/L):</label><br>
+        <input type="number" id="TDS" name="TDS" step="0.01" required><br>
+        <label for="timestamp">Timestamp:</label><br>
+        <input type="text" id="timestamp" name="timestamp" readonly><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        // Populate the timestamp field with the current date and time
+        document.getElementById('timestamp').value = new Date().toISOString();
+    </script>
+</body>
+</html>
