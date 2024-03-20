@@ -30,7 +30,7 @@ def write_to_db(sensor_data):
 
 def execute_chart_query():
     try:
-        query = "SELECT * FROM s_data WHERE time >= now() - INTERVAL '30 days'"
+        query = "SELECT * FROM s_data WHERE time >= now() - INTERVAL '30 days' ORDER BY time"
         pd = client.query(query=query, mode="pandas")
 
         return pd.to_json(orient='records')
