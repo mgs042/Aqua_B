@@ -28,9 +28,34 @@ def write_to_db(sensor_data):
     except Exception as e:
         print("Error writing to InfluxDB:", e)
 
+
+def add_sensor(sensor):
+    points = {
+          "measurement": "s_list",
+          "tags": {"sensor": sensor["sensorID"]},
+          "fields": {"location": sensor["location"], "lat": sensor["lat"], "long":sensor["long"], "status": "online"},
+          }
+    try:
+        print(config.Config.INFLUXDB_HOST)
+        client.write(record=points, write_precision="s")
+
+    except Exception as e:
+        print("Error adding data", e)
+
 def execute_chart_query():
     try:
         query = "SELECT * FROM s_data WHERE time >= now() - INTERVAL '30 days' ORDER BY time"
+        pd = client.query(query=query, mode="pandas")
+
+        return pd.to_json(orient='records')
+
+    except Exception as e:
+        print("Error executing query:", e)
+        return None
+
+def get_sensors():
+    try:
+        query = "SELECT * FROM s_list WHERE time>'2024-03-24T22:15:35.015Z'"
         pd = client.query(query=query, mode="pandas")
 
         return pd.to_json(orient='records')
