@@ -1,41 +1,78 @@
-# Aquametrics Frontend
+# Aquametrics Backend
 
-Aquametrics is an IoT-based water quality monitoring system. This repository contains the frontend application for Aquametrics.
+Aquametrics is an IoT-based water quality monitoring system. This repository contains the backend application for Aquametrics, built with Flask and InfluxDB.
 
 ## Getting Started
 
-To get started with the Aquametrics frontend, follow these steps:
+To get started with the Aquametrics backend, follow these steps:
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/aquametrics-frontend.git
+    git clone https://github.com/mgs042/Aqua_B.git
     ```
 
-2. Install the dependencies:
+2. Navigate to the project directory:
 
     ```bash
-    npm install
+    cd Aqua_B
     ```
 
-3. Start the development server:
+3. Create a virtual environment (optional but recommended):
 
     ```bash
-    npm start
+    python -m venv venv
     ```
 
-4. Access the application at [http://localhost:3000](http://localhost:3000).
+4. Activate the virtual environment:
 
-## Features
+   - On Windows:
 
-- **Real-time Monitoring:** View real-time data from water quality sensors.
-- **Historical Data:** Access historical data to track changes over time.
-- **Interactive Maps:** Visualize sensor locations on an interactive map.
-- **User Authentication:** Securely log in to view data.
+     ```bash
+     venv\Scripts\activate
+     ```
 
+   - On macOS and Linux:
+
+     ```bash
+     source venv/bin/activate
+     ```
+
+5. Install the dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+6. Set up InfluxDB:
+
+   - Install InfluxDB on your system.
+   - Create a new database for Aquametrics.
+
+7. Configure the application:
+
+   -Update 'config.py'
+
+8. Start the Flask application:
+
+    ```bash
+    python __init__.py
+    ```
+
+
+## Endpoints
+
+## Endpoints
+
+- **GET /:** Renders the sensor data input form (`sensor_form.html`).
+- **GET /add_sensor:** Renders the form for adding a new sensor (`add_sensor_form.html`).
+- **POST /write:** Receives sensor data via a form submission and stores it in the InfluxDB database.
+- **POST /new_sensor:** Creates a new sensor based on the submitted form data and stores it in the InfluxDB database.
+- **GET /chart_query:** Executes a query to retrieve data for charting purposes from the InfluxDB database.
+- **GET /list_sensor:** Retrieves a list of sensors from the InfluxDB database.
+    
 ## Technologies Used
 
-- **React:** Frontend library for building user interfaces.
-- **React Router:** Library for routing in React applications.
-- **Google Maps API:** For displaying interactive maps.
-- **Chart.js:** For creating charts to visualize data.
+- **Flask:** Micro web framework for building web applications.
+- **InfluxDB:** Time-series database for storing sensor data.
+- **Python:** Programming language used for the backend logic.
