@@ -55,7 +55,7 @@ def execute_chart_query():
 
 def get_sensors():
     try:
-        query = "SELECT * FROM s_list WHERE time>'2024-03-24T22:15:35.015Z'"
+        query = "SELECT * FROM s_list WHERE time>'2024-03-24T22:15:35.015Z' ORDER BY sensorID"
         pd = client.query(query=query, mode="pandas")
 
         return pd.to_json(orient='records')
