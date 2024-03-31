@@ -1,0 +1,3 @@
+{
+    "rewrites": [{ "source": "/(.*)", "destination": "/Aqua_B/index" }]
+  }
