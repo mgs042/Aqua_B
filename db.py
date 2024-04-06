@@ -16,7 +16,7 @@ client = InfluxDBClient3(token=config.Config.INFLUXDB_TOKEN,
 
 def write_to_db(sensor_data):
     points = {
-          "measurement": "s_data",
+          "measurement": "data",
           "tags": {"sensor": sensor_data["sensorID"]},
           "fields": {"pH": sensor_data["pH"], "temp": sensor_data["temperature"], "tds":sensor_data["TDS"], "turb": sensor_data["turbidity"], "do": sensor_data["dissolved_oxygen"]},
           "time": sensor_data["timestamp"]
@@ -44,10 +44,10 @@ def add_sensor(sensor):
 
 def execute_chart_query():
     try:
-        query = "SELECT * FROM s_data WHERE time >= now() - INTERVAL '30 days' ORDER BY time"
+        query = "SELECT * FROM data WHERE time >= now() - INTERVAL '30 days' ORDER BY time DESC LIMIT 12"
         pd = client.query(query=query, mode="pandas")
-
-        return pd.to_json(orient='records')
+        reversed_data = pd.iloc[::-1].to_json(orient='records')
+        return reversed_data
 
     except Exception as e:
         print("Error executing query:", e)
