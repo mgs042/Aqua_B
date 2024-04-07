@@ -3,10 +3,19 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import db
 import config
+import pickle
+from flask import jsonify
+import pandas as pd
+
 
 app = Flask(__name__)
 app.config.from_object(config.Config)
 CORS(app)
+
+with open('models/isolation_forest_model.pkl', 'rb') as file:
+    anomaly_model = pickle.load(file)
+with open('models/random_forest_model.pkl', 'rb') as file:
+    class_model = pickle.load(file)
 
 @app.route('/', methods=['GET'])
 def sensor_form():
@@ -26,7 +35,7 @@ def receive_sensor_data():
             "temperature": float(request.form.get('temperature')),
             "dissolved_oxygen": float(request.form.get('dissolved_oxygen')),
             "turbidity": float(request.form.get('turbidity')),
-            "TDS": float(request.form.get('TDS'))
+            "TDS": int(request.form.get('TDS'))
         }
         db.write_to_db(sensor_data)
         # Emit a message to the client to indicate that new data is available
@@ -73,6 +82,24 @@ def list_sensor():
             return result
         else:
             return "Error processing request:"
+    except Exception as e:
+        print("Error processing request:", e)
+        return "Error processing request", 500
+    
+@app.route('/analytics',)
+def analytics():
+    try:
+        data = db.get_analytics_data()
+        if data is not None:
+            # Assuming data is already a DataFrame
+            X = data.drop(columns=['time', 'sensor'])
+            Y = data.drop(columns=['time', 'sensor','do','temp'])
+            anomalies = anomaly_model.decision_function(X)
+            predictions = class_model.predict(Y)
+            rounded_anomalies = [round(anom, 3) for anom in anomalies]
+            return jsonify(anomalies=rounded_anomalies,predictions=predictions.tolist())
+        else:
+            return "Error processing request:", 500
     except Exception as e:
         print("Error processing request:", e)
         return "Error processing request", 500

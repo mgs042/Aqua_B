@@ -2,7 +2,7 @@ from influxdb_client_3 import InfluxDBClient3, flight_client_options
 import certifi
 import config
 import pandas
-
+import datetime
 fh = open(certifi.where(), "r")
 cert = fh.read()
 fh.close()
@@ -19,7 +19,7 @@ def write_to_db(sensor_data):
           "measurement": "data",
           "tags": {"sensor": sensor_data["sensorID"]},
           "fields": {"pH": sensor_data["pH"], "temp": sensor_data["temperature"], "tds":sensor_data["TDS"], "turb": sensor_data["turbidity"], "do": sensor_data["dissolved_oxygen"]},
-          "time": sensor_data["timestamp"]
+          "time": datetime.datetime.now()
           }
     try:
         print(config.Config.INFLUXDB_HOST)
@@ -52,10 +52,21 @@ def execute_chart_query():
     except Exception as e:
         print("Error executing query:", e)
         return None
+    
+
+def get_analytics_data():
+    try:
+        query = "SELECT * FROM data WHERE time >= now() - INTERVAL '30 days' ORDER BY time"
+        pd = client.query(query=query, mode="pandas")
+        return pd
+
+    except Exception as e:
+        print("Error executing query:", e)
+        return None
 
 def get_sensors():
     try:
-        query = "SELECT * FROM s_list WHERE time>'2024-03-24T22:15:35.015Z' ORDER BY sensorID"
+        query = "SELECT * FROM s_list WHERE time>'2024-03-24T22:15:35.015Z' ORDER BY sensor"
         pd = client.query(query=query, mode="pandas")
 
         return pd.to_json(orient='records')
