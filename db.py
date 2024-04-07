@@ -63,6 +63,16 @@ def get_analytics_data():
     except Exception as e:
         print("Error executing query:", e)
         return None
+    
+def get_download_data():
+    try:
+        query = "SELECT * FROM data ORDER BY time"
+        pd = client.query(query=query, mode="pandas")
+        return pd.to_json(orient='records')
+
+    except Exception as e:
+        print("Error executing query:", e)
+        return None
 
 def get_sensors():
     try:

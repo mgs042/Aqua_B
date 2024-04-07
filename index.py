@@ -104,5 +104,17 @@ def analytics():
         print("Error processing request:", e)
         return "Error processing request", 500
 
+@app.route('/download',)
+def download():
+    try:
+        data = db.get_download_data()
+        if data is not None:
+            return data
+        else:
+            return "Error processing request:", 500
+    except Exception as e:
+        print("Error processing request:", e)
+        return "Error processing request", 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
