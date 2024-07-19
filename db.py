@@ -44,7 +44,7 @@ def add_sensor(sensor):
 
 def execute_chart_query():
     try:
-        query = "SELECT * FROM data WHERE time >= now() - INTERVAL '30 days' ORDER BY time DESC LIMIT 12"
+        query = "SELECT * FROM data ORDER BY time DESC LIMIT 12"
         pd = client.query(query=query, mode="pandas")
         reversed_data = pd.iloc[::-1].to_json(orient='records')
         return reversed_data
@@ -56,7 +56,7 @@ def execute_chart_query():
 
 def get_analytics_data():
     try:
-        query = "SELECT * FROM data WHERE time >= now() - INTERVAL '30 days' ORDER BY time"
+        query = "SELECT * FROM data ORDER BY time"
         pd = client.query(query=query, mode="pandas")
         return pd
 
