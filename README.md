@@ -56,7 +56,7 @@ To get started with the Aquametrics backend, follow these steps:
 8. Start the Flask application:
 
     ```bash
-    python __init__.py
+    python index.py
     ```
 
 
